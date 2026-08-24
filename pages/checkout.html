@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - BazaarHub</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <style>
+        .checkout-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .checkout-form {
+            background: white;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section h3 {
+            color: #004E89;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            border-bottom: 2px solid #FF6B35;
+            padding-bottom: 0.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 0.8rem;
+            border: 1px solid #E0E0E0;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #FF6B35;
+            box-shadow: 0 0 5px rgba(255, 107, 53, 0.3);
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-option {
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .payment-option:hover {
+            border-color: #FF6B35;
+            background: rgba(255, 107, 53, 0.05);
+        }
+
+        .payment-option input[type="radio"] {
+            display: none;
+        }
+
+        .payment-option input[type="radio"]:checked + label {
+            color: #FF6B35;
+        }
+
+        .payment-option input[type="radio"]:checked ~ .payment-option {
+            border-color: #FF6B35;
+        }
+
+        .payment-option label {
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+        }
+
+        .payment-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-details {
+            display: none;
+            background: #F8F9FA;
+            padding: 1.5rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+
+        .payment-details.active {
+            display: block;
+        }
+
+        .payment-details p {
+            margin-bottom: 0.5rem;
+            color: #666;
+        }
+
+        .upi-input {
+            margin-top: 1rem;
+        }
+
+        .order-summary {
+            background: white;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            padding: 2rem;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .order-summary h3 {
+            color: #004E89;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            flex: 1;
+        }
+
+        .item-total {
+            font-weight: 600;
+            color: #FF6B35;
+        }
+
+        .summary-total {
+            border-top: 2px solid #E0E0E0;
+            padding-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #FF6B35;
+        }
+
+        .place-order-btn {
+            width: 100%;
+            background: #00A651;
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 1.5rem;
+        }
+
+        .place-order-btn:hover {
+            background: #008C3A;
+        }
+
+        .place-order-btn:disabled {
+            background: #CCC;
+            cursor: not-allowed;
+        }
+
+        .terms-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .terms-checkbox input {
+            cursor: pointer;
+        }
+
+        .terms-checkbox label {
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                position: static;
+            }
+
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1>🛍️ BazaarHub</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../index.html" class="nav-link">Home</a></li>
+                <li><a href="../index.html#products" class="nav-link">Products</a></li>
+                <li><a href="cart.html" class="nav-link">Cart</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Checkout Section -->
+    <div class="checkout-container">
+        <h2 style="margin-bottom: 2rem; color: #004E89;">Checkout</h2>
+
+        <div class="checkout-grid">
+            <!-- Checkout Form -->
+            <form class="checkout-form" id="checkoutForm">
+                <!-- Delivery Information -->
+                <div class="form-section">
+                    <h3>Delivery Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name *</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name *</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                    </div>
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                    </div>
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="phone">Phone Number *</label>
+                            <input type="tel" id="phone" name="phone" placeholder="+91-XXXXXXXXXX" required>
+                        </div>
+                    </div>
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="address">Address *</label>
+                            <input type="text" id="address" name="address" placeholder="Street address" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">City *</label>
+                            <input type="text" id="city" name="city" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State *</label>
+                            <input type="text" id="state" name="state" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="zipcode">Zip Code *</label>
+                            <input type="text" id="zipcode" name="zipcode" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="country">Country *</label>
+                            <input type="text" id="country" name="country" value="India" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="form-section">
+                    <h3>Payment Method</h3>
+                    <div class="payment-methods">
+                        <div class="payment-option">
+                            <input type="radio" id="cod" name="paymentMethod" value="cod" checked onchange="showPaymentDetails('cod')">
+                            <label for="cod">
+                                <div class="payment-icon">💵</div>
+                                Cash on Delivery
+                            </label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" id="upi" name="paymentMethod" value="upi" onchange="showPaymentDetails('upi')">
+                            <label for="upi">
+                                <div class="payment-icon">📱</div>
+                                UPI Payment
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- COD Details -->
+                    <div id="codDetails" class="payment-details active">
+                        <p>✅ <strong>Pay when you receive your order</strong></p>
+                        <p>No advance payment required. You can pay the delivery executive in cash or online when your order arrives at your doorstep.</p>
+                    </div>
+
+                    <!-- UPI Details -->
+                    <div id="upiDetails" class="payment-details">
+                        <p>📱 Pay securely using UPI</p>
+                        <div class="upi-input">
+                            <div class="form-group">
+                                <label for="upiId">UPI ID *</label>
+                                <input type="text" id="upiId" name="upiId" placeholder="yourname@upi">
+                            </div>
+                        </div>
+                        <p style="margin-top: 1rem; font-size: 0.9rem; color: #999;">Note: You will receive a payment request on your registered UPI app</p>
+                    </div>
+                </div>
+
+                <!-- Terms & Conditions -->
+                <div class="terms-checkbox">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms">I agree to the terms and conditions and privacy policy</label>
+                </div>
+
+                <button type="submit" class="place-order-btn">Place Order</button>
+            </form>
+
+            <!-- Order Summary -->
+            <div class="order-summary">
+                <h3>Order Summary</h3>
+                <div id="orderItems">
+                    <!-- Items will be loaded here -->
+                </div>
+                <div class="summary-total">
+                    <span>Total:</span>
+                    <span>₹<span id="finalTotal">0</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 BazaarHub. All rights reserved. | Powered by ROYALBUILDS</p>
+    </footer>
+
+    <script src="../js/cart.js"></script>
+    <script>
+        // Show payment method details
+        function showPaymentDetails(method) {
+            document.getElementById('codDetails').classList.remove('active');
+            document.getElementById('upiDetails').classList.remove('active');
+            
+            if (method === 'cod') {
+                document.getElementById('codDetails').classList.add('active');
+                document.getElementById('upiId').removeAttribute('required');
+            } else {
+                document.getElementById('upiDetails').classList.add('active');
+                document.getElementById('upiId').setAttribute('required', 'required');
+            }
+        }
+
+        // Display order items
+        function displayOrderItems() {
+            const cart = getCart();
+            const container = document.getElementById('orderItems');
+            const total = getCartTotal();
+            const tax = Math.round(total * 0.05);
+            const grandTotal = total + tax;
+
+            if (cart.length === 0) {
+                window.location.href = 'cart.html';
+                return;
+            }
+
+            container.innerHTML = cart.map(item => `
+                <div class="order-item">
+                    <div>
+                        <div class="item-name">${item.name}</div>
+                        <small>Qty: ${item.quantity}</small>
+                    </div>
+                    <div class="item-total">₹${item.price * item.quantity}</div>
+                </div>
+            `).join('');
+
+            // Add summary rows
+            container.innerHTML += `
+                <div class="order-item">
+                    <span>Subtotal:</span>
+                    <span>₹${total}</span>
+                </div>
+                <div class="order-item">
+                    <span>Tax (5%):</span>
+                    <span>₹${tax}</span>
+                </div>
+            `;
+
+            document.getElementById('finalTotal').textContent = grandTotal;
+        }
+
+        // Handle form submission
+        document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            const formData = new FormData(this);
+            const orderData = {
+                customer: {
+                    firstName: formData.get('firstName'),
+                    lastName: formData.get('lastName'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone'),
+                    address: formData.get('address'),
+                    city: formData.get('city'),
+                    state: formData.get('state'),
+                    zipcode: formData.get('zipcode'),
+                    country: formData.get('country')
+                },
+                payment: {
+                    method: paymentMethod,
+                    upiId: paymentMethod === 'upi' ? formData.get('upiId') : null
+                },
+                items: getCart(),
+                total: getCartTotal(),
+                tax: Math.round(getCartTotal() * 0.05),
+                orderDate: new Date().toISOString(),
+                orderNumber: 'ORD' + Date.now()
+            };
+
+            // Save order
+            localStorage.setItem('bazaarhubOrder', JSON.stringify(orderData));
+            localStorage.removeItem('bazaarhubCart');
+
+            // Redirect to confirmation
+            window.location.href = 'order-confirmation.html';
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', displayOrderItems);
+    </script>
+</body>
+</html>
