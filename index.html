@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BazaarHub - Online Shopping Made Easy</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1>🛍️ BazaarHub</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#products" class="nav-link">Products</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li><a href="pages/login.html" class="nav-link">Login</a></li>
+                <li><a href="pages/cart.html" class="cart-link">🛒 Cart (<span id="cart-count">0</span>)</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h2>Welcome to BazaarHub</h2>
+            <p>Your one-stop shop for amazing deals on quality products</p>
+            <button class="cta-btn" onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})">Shop Now</button>
+        </div>
+    </section>
+
+    <!-- Search & Filter Section -->
+    <section class="search-section">
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search for products..." class="search-bar">
+            <select id="categoryFilter" class="filter-select">
+                <option value="">All Categories</option>
+                <option value="electronics">Electronics</option>
+                <option value="fashion">Fashion</option>
+                <option value="home">Home & Kitchen</option>
+                <option value="beauty">Beauty & Personal Care</option>
+                <option value="sports">Sports & Outdoors</option>
+            </select>
+            <button class="search-btn" onclick="searchProducts()">Search</button>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <h2>Featured Products</h2>
+        <div class="products-grid" id="productsGrid">
+            <!-- Products will be loaded here by JavaScript -->
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <h2>About BazaarHub</h2>
+        <div class="about-content">
+            <p>BazaarHub is your trusted online marketplace for quality products at unbeatable prices. We partner with Meesho to bring you the latest trends and best deals.</p>
+            <ul class="features">
+                <li>✅ Fast Delivery</li>
+                <li>✅ Quality Assured</li>
+                <li>✅ Easy Returns</li>
+                <li>✅ Secure Payments</li>
+                <li>✅ 24/7 Customer Support</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <h2>Contact Us</h2>
+        <div class="contact-content">
+            <p>📧 Email: support@bazaarhub.com</p>
+            <p>📞 Phone: +91-XXXXXXXXXX</p>
+            <p>📍 Address: India</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 BazaarHub. All rights reserved. | Powered by ROYALBUILDS</p>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
