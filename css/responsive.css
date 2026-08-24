@@ -1,4 +1,4 @@
-/* Responsive Design - BazaarHub */
+/* Responsive Design */
 
 @media (max-width: 768px) {
     .nav-container {
@@ -32,13 +32,8 @@
     .section-title {
         font-size: 2rem;
     }
-    .cart-content,
-    .checkout-grid {
+    .cart-content, .checkout-grid {
         grid-template-columns: 1fr;
-    }
-    .cart-summary,
-    .order-summary {
-        position: static;
     }
 }
 
@@ -62,10 +57,5 @@
     }
     .section-title {
         font-size: 1.5rem;
-    }
-    .cart-container,
-    .checkout-container,
-    .confirmation-container {
-        padding: 0 1rem;
     }
 }

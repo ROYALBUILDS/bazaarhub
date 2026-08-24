@@ -1,6 +1,6 @@
-// Shopping Cart Management
+// Cart Management
 
-// Get cart from localStorage or initialize empty
+// Get cart from localStorage
 function getCart() {
     const cart = localStorage.getItem('bazaarhubCart');
     return cart ? JSON.parse(cart) : [];
@@ -9,46 +9,46 @@ function getCart() {
 // Save cart to localStorage
 function saveCart(cart) {
     localStorage.setItem('bazaarhubCart', JSON.stringify(cart));
-    updateCartCount();
 }
 
-// Add product to cart
-function addToCart(product) {
+// Add to cart
+function addToCart(productId) {
+    const product = products.find(p => p.id === productId);
     const cart = getCart();
+    const existingItem = cart.find(item => item.id === productId);
     
-    // Check if product already exists in cart
-    const existingProduct = cart.find(item => item.id === product.id);
-    
-    if (existingProduct) {
-        existingProduct.quantity += 1;
+    if (existingItem) {
+        existingItem.quantity += 1;
     } else {
-        product.quantity = 1;
-        cart.push(product);
+        cart.push({
+            ...product,
+            quantity: 1
+        });
     }
     
     saveCart(cart);
-    showNotification(`${product.name} added to cart!`);
+    updateCartCount();
+    showNotification('✅ Added to cart!');
 }
 
-// Remove product from cart
+// Remove from cart
 function removeFromCart(productId) {
     let cart = getCart();
     cart = cart.filter(item => item.id !== productId);
     saveCart(cart);
+    updateCartCount();
 }
 
-// Update product quantity
-function updateQuantity(productId, quantity) {
-    const cart = getCart();
-    const product = cart.find(item => item.id === productId);
+// Update quantity
+function updateQuantity(productId, newQuantity) {
+    const quantity = parseInt(newQuantity);
+    if (quantity < 1) return;
     
-    if (product) {
-        if (quantity <= 0) {
-            removeFromCart(productId);
-        } else {
-            product.quantity = quantity;
-            saveCart(cart);
-        }
+    const cart = getCart();
+    const item = cart.find(p => p.id === productId);
+    if (item) {
+        item.quantity = quantity;
+        saveCart(cart);
     }
 }
 
@@ -58,23 +58,20 @@ function getCartTotal() {
     return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
 }
 
-// Get cart item count
-function getCartCount() {
-    const cart = getCart();
-    return cart.reduce((count, item) => count + item.quantity, 0);
-}
-
 // Update cart count in navbar
 function updateCartCount() {
-    const cartCount = document.getElementById('cart-count');
-    if (cartCount) {
-        cartCount.textContent = getCartCount();
+    const cart = getCart();
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const cartCountElement = document.getElementById('cart-count');
+    if (cartCountElement) {
+        cartCountElement.textContent = totalItems;
     }
 }
 
 // Show notification
 function showNotification(message) {
     const notification = document.createElement('div');
+    notification.textContent = message;
     notification.style.cssText = `
         position: fixed;
         top: 20px;
@@ -83,60 +80,43 @@ function showNotification(message) {
         color: white;
         padding: 1rem 1.5rem;
         border-radius: 5px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         z-index: 1000;
-        animation: slideIn 0.3s ease-in-out;
+        animation: slideIn 0.3s ease-out;
     `;
-    notification.textContent = message;
     document.body.appendChild(notification);
     
     setTimeout(() => {
-        notification.style.animation = 'slideOut 0.3s ease-in-out';
+        notification.style.animation = 'slideOut 0.3s ease-out';
         setTimeout(() => notification.remove(), 300);
-    }, 2000);
+    }, 3000);
 }
+
+// Add styles for notifications
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
 
 // Initialize cart count on page load
 document.addEventListener('DOMContentLoaded', updateCartCount);
-
-// Add animation styles
-if (!document.querySelector('style[data-cart-animations]')) {
-    const style = document.createElement('style');
-    style.setAttribute('data-cart-animations', 'true');
-    style.textContent = `
-        @keyframes slideIn {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        
-        @keyframes slideOut {
-            from {
-                transform: translateX(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-        }
-    `;
-    document.head.appendChild(style);
-}
-
-// Export for use in other files
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { 
-        getCart, 
-        saveCart, 
-        addToCart, 
-        removeFromCart, 
-        updateQuantity, 
-        getCartTotal, 
-        getCartCount 
-    };
-}
